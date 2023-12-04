@@ -10,7 +10,7 @@ function part1(inputs: string[]) {
   }, 0);
 }
 
-console.log(part1(inputs));
+console.log('Part 1', part1(inputs));
 
 const numberRegex = /(?=(\d|one|two|three|four|five|six|seven|eight|nine))/g;
 const wordToDigit: Record<string, string | undefined> = {
@@ -38,4 +38,4 @@ function part2(inputs: string[]) {
   }, 0);
 }
 
-console.log(part2(inputs));
+console.log('Part 2', part2(inputs));
