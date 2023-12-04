@@ -1,4 +1,4 @@
-import { inputs } from "./01data";
+import { day01Inputs } from "./01data";
 
 function part1(inputs: string[]) {
   return inputs.reduce((acc, input) => {
@@ -10,7 +10,7 @@ function part1(inputs: string[]) {
   }, 0);
 }
 
-console.log('Part 1', part1(inputs));
+console.log('Part 1', part1(day01Inputs));
 
 const numberRegex = /(?=(\d|one|two|three|four|five|six|seven|eight|nine))/g;
 const wordToDigit: Record<string, string | undefined> = {
@@ -38,4 +38,4 @@ function part2(inputs: string[]) {
   }, 0);
 }
 
-console.log('Part 2', part2(inputs));
+console.log('Part 2', part2(day01Inputs));

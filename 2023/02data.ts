@@ -1,4 +1,4 @@
-export const inputs = [
+export const day02Inputs = [
   "",
   "1 blue, 1 red; 10 red; 8 red, 1 blue, 1 green; 1 green, 5 blue",
   "9 green, 11 red; 1 green, 7 red, 1 blue; 1 red, 1 blue, 1 green; 11 green, 3 red, 1 blue; 5 green, 12 red; 8 green, 1 blue, 7 red",

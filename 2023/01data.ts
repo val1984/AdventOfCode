@@ -1,4 +1,4 @@
-export const inputs = [
+export const day01Inputs = [
   'five8b',
   '2733vmmpknvgr',
   '3oneeighttwo',

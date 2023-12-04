@@ -1,4 +1,4 @@
-import { inputs } from "./02data";
+import { day02Inputs } from "./02data";
 
 function findMinimumNumberOfDices(input: string[]) {
   return input.map(value => {
@@ -30,7 +30,7 @@ function part1(input: string[]) {
   }, 0);
 }
 
-console.log('Part 1', part1(inputs));
+console.log('Part 1', part1(day02Inputs));
 
 function part2(input: string[]) {
   const minDices = findMinimumNumberOfDices(input);
@@ -39,4 +39,4 @@ function part2(input: string[]) {
   }, 0);
 }
 
-console.log('Part 2', part2(inputs));
+console.log('Part 2', part2(day02Inputs));
