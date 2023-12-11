@@ -4,15 +4,20 @@ export const day10Demo = `.....
 .L-J.
 .....`;
 
-export const day10Part2Demo = `...........
-.S-------7.
-.|F-----7|.
-.||.....||.
-.||.....||.
-.|L-7.F-J|.
-.|..|.|..|.
-.L--J.L--J.
-...........`;
+
+
+
+export const day10Part2Demo = 
+`.F----7F7F7F7F-7....
+.|F--7||||||||FJ....
+.||.FJ||||||||L7....
+FJL7L7LJLJ||LJ.L-7..
+L--J.L7...LJS7F-7L7.
+....F-J..F7FJ|L7L7L7
+....L7.F7||L7|.L7L7|
+.....|FJLJ|FJ|F7|.LJ
+....FJL-7.||.||||...
+....L---J.LJ.LJLJ...`;
 
 export const day10Input = `F-7JF-F-F|-J.FL|.L-L7.L-L-J.7F-FJ-F7F.F7J-F.J.7.FF7L-7F7|7FFF7FF7FF7.L7J-77FF-7-|-|7.7.J7J7F--J7..FL-F.JFJ.-7F-F7F77-L--F.FF77-7FFLJ-.F|J.F7
 |F-J||L-.J7.|..F7.LL7J.-L|.LL-J|J-|JJF7J.FF-7.F.-L7JL|.7.L|-|77F.||-7-|J|FJ7L|JLL7JLF7-F---7JLJ7-F-J|.FFJL||L|7L|-FJ7...77LJ-7FFLJ||.LJ|7F|7
