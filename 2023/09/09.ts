@@ -1,4 +1,4 @@
-import { day09Demo, day09Input } from "./09data";
+import { day09Input } from "./09data.js";
 
 function computeHistoryDeltas(history: number[]) {
   const deltas: number[] = [];
@@ -30,7 +30,7 @@ function part1(input: string) {
   }, 0);
 }
 
-console.log(part1(day09Input));
+console.log('Part 1', part1(day09Input));
 
 function computeHistoryPreviousValue(deltaIterations: number[][]): number {
   return deltaIterations.reduceRight((previousLineValue, deltas) => {
@@ -54,4 +54,4 @@ function part2(input: string) {
   }, 0);
 }
 
-console.log(part2(day09Input));
+console.log('Part 2', part2(day09Input));

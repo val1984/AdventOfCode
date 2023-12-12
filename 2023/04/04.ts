@@ -1,4 +1,4 @@
-import { day04Inputs } from "./04data";
+import { day04Inputs } from "./04data.js";
 
 function computePoints(cards: string[]) {
   return cards.map((line) => {

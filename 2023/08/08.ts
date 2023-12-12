@@ -22,7 +22,7 @@ function part1(input: string) {
   return stepCount;
 }
 
-console.log(part1(day08Input));
+console.log('Part 1', part1(day08Input));
 
 function isPrime(primes: number[], value: number) {
   const maxDivider = Math.sqrt(value);
@@ -97,4 +97,4 @@ function part2(input: string) {
   return computeLcm(cycleLengths);
 }
 
-console.log(part2(day08Input));
+console.log('Part 2', part2(day08Input));

@@ -1,4 +1,4 @@
-import { day02Inputs } from "./02data";
+import { day02Inputs } from "./02data.js";
 
 function findMinimumNumberOfDices(input: string[]) {
   return input.map(value => {

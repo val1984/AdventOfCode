@@ -1,4 +1,4 @@
-import { day01Inputs } from "./01data";
+import { day01Inputs } from "./01data.js";
 
 function part1(inputs: string[]) {
   return inputs.reduce((acc, input) => {

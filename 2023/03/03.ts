@@ -1,4 +1,4 @@
-import { day03Inputs } from "./03data";
+import { day03Inputs } from "./03data.js";
 
 type Point = readonly [number, number];
 

@@ -1,4 +1,4 @@
-import { day06Input } from "./06data";
+import { day06Input } from "./06data.js";
 
 function computeWinningRaces(time: number, distance: number) {
   let winningRaces = 0;
