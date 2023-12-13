@@ -25,49 +25,37 @@ function computeDistance(input1: string, input2: string) {
   return distance;
 }
 
-function findReflection(inputs: string[], allowedDefects = 0, from = 0) {
-  let previousInput = inputs[0];
-  let i = from + 1;
-  while (i < inputs.length && computeDistance(inputs[i], previousInput) > allowedDefects) {
-    previousInput = inputs[i++];
-  }
-  if (i < inputs.length) {
-    let totalDefects = computeDistance(inputs[i], previousInput)
-    // console.log(i);
-    let isReflection = true;
-    let j = 1;
-    while (isReflection && i + j < inputs.length && i - j > 0) {
-      const postReflection = inputs[i + j];
-      const preReflection = inputs[i - j - 1];
-      const defects = computeDistance(postReflection, preReflection);
+function findReflection(inputs: string[], allowedDefects = 0) {
+  for (let i = 1; i < inputs.length; i++) {
+    let totalDefects = 0
+    
+    for (let j = 0; i + j < inputs.length && i - j > 0; j++) {
+      const preLine = inputs[i - j - 1];
+      const postLine = inputs[i + j];
+      const defects = computeDistance(preLine, postLine)
       totalDefects += defects;
-      isReflection &&= totalDefects <= allowedDefects;
-      console.log(i, j, i + j, i - j - 1, postReflection, preReflection, isReflection);
-      j++;
+      if (totalDefects > allowedDefects) {
+        // Too many defects, exit reflection check loop to try a new i value
+        break;
+      }
     }
-    if (isReflection && totalDefects === allowedDefects) {
-      return i;
-    } else {
-      return findReflection(inputs, allowedDefects, i);
+    if (totalDefects !== allowedDefects) {
+      // Not the exact number of defects, try next line
+      continue;
     }
+    // Found the reflection with exact number of defects
+    return i;
   }
+  // No reflection found
   return 0;
 }
 
 function makeComputeReflectionScore(allowedDefects = 0) {
-  return (total: number, puzzle: string, index: number) => {
+  return (total: number, puzzle: string, _index: number) => {
     const lines = extractRows(puzzle);
-    console.log('Vertical');
     const verticalReflectionPoint = findReflection(lines, allowedDefects);
-    console.log('Horizontal');
     const cols = extractCols(lines);
     const horizontalReflectionPoint = findReflection(cols, allowedDefects);
-    console.log(
-      "Puzzle",
-      index,
-      horizontalReflectionPoint,
-      verticalReflectionPoint
-    );
     return total + (horizontalReflectionPoint || 100 * verticalReflectionPoint);
   };
 }
