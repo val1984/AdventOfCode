@@ -37,17 +37,17 @@ function computePossibilities(
     return combinations;
   }
 
-  if (springs.startsWith("#")) {
+  if (allDamagedRegex.test(springs.substring(1, groups[0] + 1))) {
     return computePossibilities(
-      springs.substring(groups[0] + 1),
+      springs.substring(groups[0] + 2),
       groups.slice(1),
       lineNumber
     );
   }
 
-  if (allDamagedRegex.test(springs.substring(1, groups[0] + 1))) {
+  if (springs.startsWith("#")) {
     return computePossibilities(
-      springs.substring(groups[0] + 2),
+      springs.substring(groups[0] + 1),
       groups.slice(1),
       lineNumber
     );
@@ -98,16 +98,43 @@ function computePossibilities(
   return 1;
 }
 
+function bruteForceComputePossibilities(
+  springs: string,
+  groupLengths: number[]
+) {
+  console.log(springs);
+  let damaged;
+  damaged = springs.replace(/[\?\#]/g, "1").replace(/ /g, "0");
+  console.log(damaged);
+  damaged = parseInt(damaged, 2);
+  let unknown;
+  unknown = springs.replace(/\?/g, "1").replace(/[ \#]/g, "0");
+  console.log(unknown);
+  unknown = parseInt(unknown, 2);
+  console.log(damaged, unknown, groupLengths);
+  let total = 0;
+  for (let candidate = 1; candidate <= damaged; candidate++) {
+    if ((candidate & damaged) === candidate) {
+      let i = 0;
+      while (candidate >> i) {
+        break;
+      }
+      total++;
+    }
+  }
+  return total;
+}
+
 function part1(input: string) {
   const springsData = extractInput(input);
   return springsData.reduce((total, [springs, groups], lineIndex) => {
-    const possibilities = computePossibilities(springs, groups, lineIndex + 1);
+    const possibilities = bruteForceComputePossibilities(springs, groups);
     // console.log("Line", lineIndex + 1, springs, groups, possibilities);
     return total + possibilities;
   }, 0);
 }
 
-console.log("Part 1", part1(day12Input));
+console.log("Part 1", part1(day12Demo));
 
 // function part2(input: string) {
 //   return input;
