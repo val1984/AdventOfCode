@@ -1,4 +1,3 @@
-import { transpose } from "../../utils/matrix";
 import { day16Demo, day16Input } from "./16data";
 
 type Vector = [r: number, c: number, dr: number, dc: number];
@@ -8,23 +7,41 @@ function part1(input: string) {
   return visit(rows, [0, 0, 0, 1]);
 }
 
-function visit(rows: string[], origin: Vector) {
+function direction(dr: number, dc: number) {
+  switch (true) {
+    case dc === -1:
+      return 1;
+    case dc === 1:
+      return 2;
+    case dr === -1:
+      return 4;
+    case dr === 1:
+      return 8;
+      default: throw new Error(`Unexpected dr=${dr},dc=${dc}`);
+  }
+}
+
+function visit(rows: string[], origin: Vector, maxNonChangingIterations = 100) {
   let waveFronts: Vector[] = [origin];
-  let visited: boolean[][] = rows.map(() => []);
+  let visited: number[][] = rows.map((line) => Array.from(line).map(() => 0));
   let visitedCount = 0;
   let changed = true;
-  let iteration = 0;
-  let allowedRetries = 5;
+  let allowedRetries = maxNonChangingIterations;
   while (allowedRetries > 0) {
     // console.log(`Iteration`, ++iteration, visitedCount);
     if (!changed) {
       allowedRetries--;
     } else {
-      allowedRetries = 5;
+      allowedRetries = maxNonChangingIterations;
     }
     changed = false;
     waveFronts = waveFronts.filter(
-      ([r, c]) => r >= 0 && c >= 0 && r < rows.length && c < rows[0].length
+      ([r, c, dr, dc]) =>
+        r >= 0 &&
+        c >= 0 &&
+        r < rows.length &&
+        c < rows[0].length &&
+        !(visited[r][c] & direction(dr, dc))
     );
     const currentWaveLength = waveFronts.length;
     for (let i = 0; i < currentWaveLength; i++) {
@@ -34,8 +51,8 @@ function visit(rows: string[], origin: Vector) {
       if (!visited[r][c]) {
         changed = true;
         visitedCount++;
-        visited[r][c] = true;
       }
+      visited[r][c] |= direction(dr, dc);
       switch (true) {
         case current === ".":
         case current === "-" && dc !== 0:
@@ -65,7 +82,7 @@ function visit(rows: string[], origin: Vector) {
   return visitedCount;
 }
 
-// console.log("Part 1", part1(day16Input));
+console.log("Part 1", part1(day16Input));
 
 function part2(input: string) {
   const rows = input.split("\n");
@@ -75,11 +92,11 @@ function part2(input: string) {
       maxEnergy,
       visit(rows, [0, i, 1, 0]),
       visit(rows, [i, 0, 0, 1]),
-      visit(rows, [0, rows.length - 1 - i, -1, 0]),
-      visit(rows, [rows.length - 1 - i, 0, 0, -1])
+      visit(rows, [rows.length - 1, i, -1, 0]),
+      visit(rows, [i, rows.length - 1, 0, -1])
     );
   }
   return maxEnergy;
 }
 
-console.log("Part 2", part2(day16Demo));
+console.log("Part 2", part2(day16Input));
