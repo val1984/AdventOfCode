@@ -33,23 +33,21 @@ function dequeue(priorityQueue: PriorityQueueElement[]) {
 function direction(dr: number, dc: number) {
   switch (true) {
     case dc === -1:
-      return 1024;
+      return 1;
     case dc === 1:
-      return 2048;
+      return 2;
     case dr === -1:
-      return 4096;
+      return 3;
     case dr === 1:
-      return 8192;
+      return 4;
     default:
       return 0;
   }
 }
 
-const timesMapping = [0, 1, 2, 4, 8, 16, 32, 64, 128, 256, 512];
-
 function findShortestPath(input: string, maxStraight = 3, minStraight = 0) {
   const rows = input.split("\n").map((line) => Array.from(line).map(Number));
-  const visited = rows.map((row) => row.map(() => 0));
+  const visited = rows.map((row) => row.map(() => [] as boolean[][]));
   const priorityQueue: PriorityQueueElement[] = [[0, 0, 0, 0, 0, 0]];
   while (priorityQueue.length !== 0) {
     const [hl, r, c, dr, dc, times] = dequeue(priorityQueue);
@@ -59,16 +57,16 @@ function findShortestPath(input: string, maxStraight = 3, minStraight = 0) {
       c === rows[0].length - 1 &&
       times >= minStraight
     ) {
-      console.log([hl, r, c, dr, dc, times]);
       return hl;
     }
 
-    const visit = direction(dr, dc) | timesMapping[times];
-    if (visit !== 0 && (visited[r][c] & visit) === visit) {
+    visited[r][c][times] ??= [];
+    const dir = direction(dr, dc);
+    if (visited[r][c][times][dir]) {
       continue;
     }
 
-    visited[r][c] |= visit;
+    visited[r][c][times][dir] = true;
 
     if (times < maxStraight && (dr !== 0 || dc !== 0)) {
       const nr = r + dr;
@@ -103,4 +101,4 @@ function part2(input: string) {
   return findShortestPath(input, 10, 4);
 }
 
-console.log("Part 2", part2(day17Part2Demo));
+console.log("Part 2", part2(day17Input));
