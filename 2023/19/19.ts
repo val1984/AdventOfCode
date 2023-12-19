@@ -1,15 +1,12 @@
 import { day19Demo, day19Input } from "./19data.ts";
 
-type RatingPredicate = (rating: Record<string, number>) => boolean;
+type Rating = Record<string, number>;
 
-interface Rule {
+type RatingPredicate = (rating: Rating) => boolean;
+
+interface ExecutableRule {
   matches: RatingPredicate;
   outcome: string;
-}
-
-interface Workflow {
-  rules: Rule[];
-  otherwise: string;
 }
 
 const workflowRulesRegex = /^(\w+)\{(.*)\}$/;
@@ -23,31 +20,32 @@ function isRejected(outcome: string) {
   return outcome === "R";
 }
 
-function part1(input: string) {
-  const [workflowsText, ratingsText] = input.split("\n\n");
-  const workflows: Record<string, Workflow> = {};
+function parseWorkflows(workflowsText: string) {
+  const workflows: Record<string, ExecutableRule[]> = {};
   for (const workflowText of workflowsText.split("\n")) {
     const [, name, rulesText] = workflowRulesRegex.exec(workflowText)!;
     const ruleStrings = rulesText.split(",");
-    const otherwise = ruleStrings.pop()!;
-    workflows[name] = {
-      rules: ruleStrings.map((ruleString) => {
-        const [, parameter, comparison, valueString, outcome] =
-          ruleRegex.exec(ruleString)!;
-        const value = Number(valueString);
-        const matches: RatingPredicate =
-          comparison === ">"
-            ? (rating) => rating[parameter] > value
-            : (rating) => rating[parameter] < value;
-        return {
-          matches,
-          outcome,
-        };
-      }),
-      otherwise,
-    };
+    const outcome = ruleStrings.pop()!;
+    workflows[name] = ruleStrings.map((ruleString) => {
+      const [, parameter, comparison, valueString, outcome] =
+        ruleRegex.exec(ruleString)!;
+      const value = Number(valueString);
+      const matches: RatingPredicate =
+        comparison === ">"
+          ? (rating) => rating[parameter] > value
+          : (rating) => rating[parameter] < value;
+      return {
+        matches,
+        outcome,
+      };
+    });
+    workflows[name].push({ matches: () => true, outcome });
   }
-  const ratings = ratingsText
+  return workflows;
+}
+
+function parseRatings(ratingsText: string) {
+  return ratingsText
     .replace(/[\{\}]/g, "")
     .split("\n")
     .map((line) =>
@@ -58,38 +56,38 @@ function part1(input: string) {
         })
       )
     );
-  return ratings.reduce((total, rating) => {
-    let currentWorkflow = "in";
-    while (true) {
-      const wf = currentWorkflow;
-      const { rules, otherwise } = workflows[wf];
-      for (const { matches, outcome } of rules) {
-        if (matches(rating)) {
-          if (isApproved(outcome)) {
-            return Object.values(rating).reduce(
-              (sum, value) => sum + value,
-              total
-            );
-          } else if (isRejected(outcome)) {
-            return total;
-          } else {
-            currentWorkflow = outcome;
-            break;
-          }
+}
+
+function computeScore(
+  workflows: Record<string, ExecutableRule[]>,
+  rating: Rating
+) {
+  let currentWorkflow = "in";
+  while (true) {
+    const rules = workflows[currentWorkflow];
+    for (const { matches, outcome } of rules) {
+      if (matches(rating)) {
+        if (isApproved(outcome)) {
+          return Object.values(rating).reduce((sum, value) => sum + value, 0);
+        } else if (isRejected(outcome)) {
+          return 0;
+        } else {
+          currentWorkflow = outcome;
+          break;
         }
       }
-      if (wf !== currentWorkflow) {
-        continue;
-      }
-      if (isApproved(otherwise)) {
-        return Object.values(rating).reduce((sum, value) => sum + value, total);
-      } else if (isRejected(otherwise)) {
-        return total;
-      } else {
-        currentWorkflow = otherwise;
-      }
     }
-  }, 0);
+  }
+}
+
+function part1(input: string) {
+  const [workflowsText, ratingsText] = input.split("\n\n");
+  const workflows = parseWorkflows(workflowsText);
+  const ratings = parseRatings(ratingsText);
+  return ratings.reduce(
+    (total, rating) => total + computeScore(workflows, rating),
+    0
+  );
 }
 
 console.log("Part 1", part1(day19Input));
