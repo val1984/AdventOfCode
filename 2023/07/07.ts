@@ -1,4 +1,4 @@
-import { day07Input } from "./07data.js";
+import { day07Input } from "./07data.ts";
 
 function* makeMapEntries(input: string) {
   let i = 0;

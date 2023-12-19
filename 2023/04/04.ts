@@ -1,4 +1,4 @@
-import { day04Inputs } from "./04data.js";
+import { day04Inputs } from "./04data.ts";
 
 function computePoints(cards: string[]) {
   return cards.map((line) => {
@@ -45,4 +45,4 @@ function part2(cards: string[]) {
   );
 }
 
-console.log('Part 2', part2(day04Inputs));
+console.log("Part 2", part2(day04Inputs));

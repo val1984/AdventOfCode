@@ -1,4 +1,4 @@
-import { day10Demo, day10Input, day10Part2Demo } from "./10data.js";
+import { day10Demo, day10Input, day10Part2Demo } from "./10data.ts";
 
 type Pipe = "S" | "|" | "-" | "F" | "J" | "7" | "L" | ".";
 type Coords = [number, number];

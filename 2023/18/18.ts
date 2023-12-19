@@ -1,4 +1,4 @@
-import { day18Demo, day18Input } from "./18data";
+import { day18Demo, day18Input } from "./18data.ts";
 
 const extractPart1InputRegex = /^(\w) (\d+) \(\#.+\)$/;
 
@@ -47,7 +47,7 @@ function part1(input: string) {
 console.log("Part 1", part1(day18Input));
 
 const extractPart2InputRegex = /^\w \d+ \(\#(.{5})(.{1})\)$/;
-const dirMapping = 'RDLU';
+const dirMapping = "RDLU";
 
 function part2(input: string) {
   const lines = input.split("\n").map((line): Data => {

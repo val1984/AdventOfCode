@@ -1,4 +1,4 @@
-import { day09Input } from "./09data.js";
+import { day09Input } from "./09data.ts";
 
 function computeHistoryDeltas(history: number[]) {
   const deltas: number[] = [];
@@ -15,13 +15,13 @@ function computeHistoryNextValue(deltaIterations: number[][]): number {
 }
 
 function part1(input: string) {
-  const lines = input.split('\n');
-  const histories = lines.map(line => line.split(' ').map(Number));
+  const lines = input.split("\n");
+  const histories = lines.map((line) => line.split(" ").map(Number));
   return histories.reduce((total, history) => {
     const deltaIterations = [history];
     while (true) {
       const nextDeltas = computeHistoryDeltas(deltaIterations.at(-1)!);
-      if (nextDeltas.every(value => value === 0)) {
+      if (nextDeltas.every((value) => value === 0)) {
         break;
       }
       deltaIterations.push(nextDeltas);
@@ -30,7 +30,7 @@ function part1(input: string) {
   }, 0);
 }
 
-console.log('Part 1', part1(day09Input));
+console.log("Part 1", part1(day09Input));
 
 function computeHistoryPreviousValue(deltaIterations: number[][]): number {
   return deltaIterations.reduceRight((previousLineValue, deltas) => {
@@ -39,13 +39,13 @@ function computeHistoryPreviousValue(deltaIterations: number[][]): number {
 }
 
 function part2(input: string) {
-  const lines = input.split('\n');
-  const histories = lines.map(line => line.split(' ').map(Number));
+  const lines = input.split("\n");
+  const histories = lines.map((line) => line.split(" ").map(Number));
   return histories.reduce((total, history) => {
     const deltaIterations = [history];
     while (true) {
       const nextDeltas = computeHistoryDeltas(deltaIterations.at(-1)!);
-      if (nextDeltas.every(value => value === 0)) {
+      if (nextDeltas.every((value) => value === 0)) {
         break;
       }
       deltaIterations.push(nextDeltas);
@@ -54,4 +54,4 @@ function part2(input: string) {
   }, 0);
 }
 
-console.log('Part 2', part2(day09Input));
+console.log("Part 2", part2(day09Input));

@@ -1,4 +1,4 @@
-import { day11Demo, day11Input } from "./11data.js";
+import { day11Demo, day11Input } from "./11data.ts";
 
 function findGalaxies(universe: string[]) {
   const positions: [number, number][] = [];

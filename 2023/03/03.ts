@@ -1,7 +1,6 @@
-import { day03Inputs } from "./03data.js";
+import { day03Inputs } from "./03data.ts";
 
 type Point = readonly [number, number];
-
 
 function extractSymbolIndices(plan: string[], symbolRegex: RegExp) {
   return plan.reduce((acc, line, x) => {
@@ -50,7 +49,7 @@ function part1(inputs: string[]) {
   return total;
 }
 
-console.log('Part 1', part1(day03Inputs));
+console.log("Part 1", part1(day03Inputs));
 
 function part2(inputs: string[]) {
   const symbolIndices = extractSymbolIndices(inputs, /\*/g);
@@ -74,4 +73,4 @@ function part2(inputs: string[]) {
   return total;
 }
 
-console.log('Part 2', part2(day03Inputs));
+console.log("Part 2", part2(day03Inputs));

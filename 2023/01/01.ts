@@ -1,4 +1,4 @@
-import { day01Inputs } from "./01data.js";
+import { day01Inputs } from "./01data.ts";
 
 function part1(inputs: string[]) {
   return inputs.reduce((acc, input) => {
@@ -10,19 +10,19 @@ function part1(inputs: string[]) {
   }, 0);
 }
 
-console.log('Part 1', part1(day01Inputs));
+console.log("Part 1", part1(day01Inputs));
 
 const numberRegex = /(?=(\d|one|two|three|four|five|six|seven|eight|nine))/g;
 const wordToDigit: Record<string, string | undefined> = {
-  one: '1',
-  two: '2',
-  three: '3',
-  four: '4',
-  five: '5',
-  six: '6',
-  seven: '7',
-  eight: '8',
-  nine: '9',
+  one: "1",
+  two: "2",
+  three: "3",
+  four: "4",
+  five: "5",
+  six: "6",
+  seven: "7",
+  eight: "8",
+  nine: "9",
 };
 function getActualDigit(value: string) {
   return wordToDigit[value] ?? value;
@@ -38,4 +38,4 @@ function part2(inputs: string[]) {
   }, 0);
 }
 
-console.log('Part 2', part2(day01Inputs));
+console.log("Part 2", part2(day01Inputs));

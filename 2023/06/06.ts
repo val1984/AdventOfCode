@@ -1,4 +1,4 @@
-import { day06Input } from "./06data.js";
+import { day06Input } from "./06data.ts";
 
 function computeWinningRaces(time: number, distance: number) {
   let winningRaces = 0;
@@ -11,7 +11,9 @@ function computeWinningRaces(time: number, distance: number) {
 }
 
 function part1(input: string) {
-  const [times, distances] = input.split('\n').map(line => line.split(/\s+/).map(Number));
+  const [times, distances] = input
+    .split("\n")
+    .map((line) => line.split(/\s+/).map(Number));
   return times.reduce((product, time, index) => {
     const distance = distances[index];
     const winningRaces = computeWinningRaces(time, distance);
@@ -19,12 +21,14 @@ function part1(input: string) {
   }, 1);
 }
 
-console.log('Part 1', part1(day06Input));
+console.log("Part 1", part1(day06Input));
 
 function part2(input: string) {
-  const [time, distance] = input.split('\n').map(line => Number(line.replace(/\s+/g, '')));
-  console.log(time, distance)
+  const [time, distance] = input
+    .split("\n")
+    .map((line) => Number(line.replace(/\s+/g, "")));
+  console.log(time, distance);
   return computeWinningRaces(time, distance);
 }
 
-console.log('Part 2', part2(day06Input));
+console.log("Part 2", part2(day06Input));

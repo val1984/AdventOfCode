@@ -1,4 +1,4 @@
-import { day12Demo, day12Input } from "./12data.js";
+import { day12Demo, day12Input } from "./12data.ts";
 
 const multipleWorkingRegex = /\.+/g;
 function extractInput(input: string) {

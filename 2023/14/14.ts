@@ -1,5 +1,5 @@
 import { transpose } from "../../utils/matrix.ts";
-import { day14Demo, day14Input } from "./14data.js";
+import { day14Demo, day14Input } from "./14data.ts";
 
 function tiltPlatform(cols: string[], down = false) {
   return cols.map((col) => {
@@ -55,11 +55,10 @@ function part2(input: string) {
   const iterations = 1000000000;
   for (let i = 0; i < iterations; i++) {
     previousGrids.push(grid.join("\n"));
-    grid = tiltPlatform(transpose(grid));
-    grid = tiltPlatform(transpose(grid));
-    grid = tiltPlatform(transpose(grid), true);
-    grid = tiltPlatform(transpose(grid), true);
-    // console.table(grid);
+    grid = tiltPlatform(transpose(grid)); // North
+    grid = tiltPlatform(transpose(grid)); // West
+    grid = tiltPlatform(transpose(grid), true); // South
+    grid = tiltPlatform(transpose(grid), true); // East
     const cycleStart = previousGrids.indexOf(grid.join("\n"));
     if (cycleStart !== -1) {
       console.log("Grid", i, "is like grid", cycleStart);

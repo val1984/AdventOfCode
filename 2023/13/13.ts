@@ -1,4 +1,4 @@
-import { day13Demo, day13Input } from "./13data.js";
+import { day13Demo, day13Input } from "./13data.ts";
 
 function extractRows(puzzle: string) {
   return puzzle.split("\n");
@@ -27,12 +27,12 @@ function computeDistance(input1: string, input2: string) {
 
 function findReflection(inputs: string[], allowedDefects = 0) {
   for (let i = 1; i < inputs.length; i++) {
-    let totalDefects = 0
-    
+    let totalDefects = 0;
+
     for (let j = 0; i + j < inputs.length && i - j > 0; j++) {
       const preLine = inputs[i - j - 1];
       const postLine = inputs[i + j];
-      const defects = computeDistance(preLine, postLine)
+      const defects = computeDistance(preLine, postLine);
       totalDefects += defects;
       if (totalDefects > allowedDefects) {
         // Too many defects, exit reflection check loop to try a new i value

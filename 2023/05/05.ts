@@ -1,4 +1,4 @@
-import { day05Demo, day05Input } from "./05data.js";
+import { day05Demo, day05Input } from "./05data.ts";
 
 function part1(input: string) {
   const data = input.split("\n\n");

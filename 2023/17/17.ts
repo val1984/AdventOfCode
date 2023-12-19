@@ -1,4 +1,4 @@
-import { day17Demo, day17Input, day17Part2Demo } from "./17data";
+import { day17Demo, day17Input, day17Part2Demo } from "./17data.ts";
 
 const neighbors = [
   [1, 0],
