@@ -92,9 +92,54 @@ function part1(input: string) {
 
 console.log("Part 1", part1(day19Input));
 
+interface Rule {
+  parameter: string;
+  comparison: ">" | "<";
+  value: number;
+  outcome: string;
+}
+
+function parseRules(workflowsText: string) {
+  const rules: Record<string, (Rule | string)[]> = {};
+  for (const workflowText of workflowsText.split("\n")) {
+    const [, name, rulesText] = workflowRulesRegex.exec(workflowText)!;
+    const ruleStrings = rulesText.split(",");
+    const otherwise = ruleStrings.pop()!;
+    rules[name] = [
+      ...ruleStrings.map((ruleString): Rule => {
+        const [, parameter, comparison, valueString, outcome] =
+          ruleRegex.exec(ruleString)!;
+        const value = Number(valueString);
+        return {
+          parameter,
+          comparison: comparison === ">" ? ">" : "<",
+          value,
+          outcome,
+        };
+      }),
+      otherwise,
+    ];
+  }
+  return rules;
+}
+
+type Parameter = "x" | "m" | "a" | "s";
+type Span = [from: number, to: number];
+
+type RatingSpan = Record<Parameter, Span>;
+
 function part2(input: string) {
   const [workflowsText] = input.split("\n\n");
-  return workflowsText;
+  const rules = parseRules(workflowsText);
+  const ratingSpans: RatingSpan[] = [
+    {
+      x: [1, 4_000],
+      m: [1, 4_000],
+      a: [1, 4_000],
+      s: [1, 4_000],
+    },
+  ];
+  return rules;
 }
 
 console.log("Part 2", part2(day19Demo));
