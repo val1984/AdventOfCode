@@ -1,4 +1,5 @@
-import { day20Demo1, day20Demo2, day20Input } from "./20data";
+import { computeLcm, computePrimeFactors } from "../../utils/number.ts";
+import { day20Demo1, day20Demo2, day20Input } from "./20data.ts";
 
 type ModuleType = "broadcast" | "flip-flop" | "conjunction";
 interface ModuleBase {
@@ -48,6 +49,19 @@ function parseModule(line: string): [string, Module] {
   }
 }
 
+function parseModulesGraph(input: string) {
+  const modulesMap = Object.fromEntries(input.split("\n").map(parseModule));
+  Object.values(modulesMap).forEach((module) => {
+    module.destinations.forEach((dest) => {
+      const destModule = modulesMap?.[dest];
+      if (destModule?.type === "conjunction") {
+        destModule.previousInputsHighs[module.id] = false;
+      }
+    });
+  });
+  return modulesMap;
+}
+
 function* range(end: number, start = 0) {
   for (let i = start; i < end; i++) {
     yield i;
@@ -56,7 +70,16 @@ function* range(end: number, start = 0) {
 
 type Pulses = [low: number, high: number];
 
-function visitNodes(modulesMap: Record<string, Module>): Pulses {
+type ModuleVisitor = (
+  module: Module,
+  origin: string,
+  pulseIsHigh: boolean
+) => void;
+
+function startPulse(
+  modulesMap: Record<string, Module>,
+  visitor: ModuleVisitor = () => {}
+): Pulses {
   const modulesQueue: [string, string, boolean][] = [
     ["button", "broadcaster", false],
   ];
@@ -99,24 +122,17 @@ function visitNodes(modulesMap: Record<string, Module>): Pulses {
         });
         break;
     }
+    visitor(module, origin, pulseIsHigh);
   }
   return [low, high];
 }
 
 function part1(input: string) {
-  const modulesMap = Object.fromEntries(input.split("\n").map(parseModule));
-  Object.values(modulesMap).forEach((module) => {
-    module.destinations.forEach((dest) => {
-      const destModule = modulesMap?.[dest];
-      if (destModule?.type === "conjunction") {
-        destModule.previousInputsHighs[module.id] = false;
-      }
-    });
-  });
+  const modulesGraph = parseModulesGraph(input);
   let low = 0,
     high = 0;
   for (const i of range(1000)) {
-    const [currLow, currHigh] = visitNodes(modulesMap);
+    const [currLow, currHigh] = startPulse(modulesGraph);
     low += currLow;
     high += currHigh;
   }
@@ -125,3 +141,35 @@ function part1(input: string) {
 }
 
 console.log("Part 1", part1(day20Input));
+
+function findRx(modulesGraph: { [k: string]: Module }) {
+  for (const id of Object.keys(modulesGraph)) {
+    if (modulesGraph[id].destinations.includes("rx")) {
+      return modulesGraph[id];
+    }
+  }
+}
+
+function part2(input: string) {
+  const modulesGraph = parseModulesGraph(input);
+  const rxOrigin = findRx(modulesGraph);
+  if (rxOrigin?.type !== "conjunction") {
+    throw new Error("Unexpected rx origin module");
+  }
+  const cycleModules = Object.keys(rxOrigin.previousInputsHighs);
+  const cycleLengths = Object.fromEntries(cycleModules.map((id) => [id, 0]));
+  let buttonPresses = 0;
+  const visitor: ModuleVisitor = ({ type, id }, origin, pulseIsHigh) => {
+    if (type === "conjunction" && id === rxOrigin.id && pulseIsHigh) {
+      cycleLengths[origin] = buttonPresses;
+    }
+  };
+  while (cycleModules.some((id) => cycleLengths[id] === 0)) {
+    buttonPresses++;
+    startPulse(modulesGraph, visitor);
+  }
+  console.log(cycleLengths);
+  return computeLcm(Object.values(cycleLengths));
+}
+
+console.log("Part 2", part2(day20Input));
