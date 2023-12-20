@@ -93,31 +93,31 @@ function part1(input: string) {
 console.log("Part 1", part1(day19Input));
 
 interface Rule {
-  parameter: string;
+  parameter: Parameter;
   comparison: ">" | "<";
   value: number;
   outcome: string;
 }
 
 function parseRules(workflowsText: string) {
-  const rules: Record<string, (Rule | string)[]> = {};
+  const rules: Record<string, [string, ...Rule[]]> = {};
   for (const workflowText of workflowsText.split("\n")) {
     const [, name, rulesText] = workflowRulesRegex.exec(workflowText)!;
     const ruleStrings = rulesText.split(",");
     const otherwise = ruleStrings.pop()!;
     rules[name] = [
+      otherwise,
       ...ruleStrings.map((ruleString): Rule => {
         const [, parameter, comparison, valueString, outcome] =
           ruleRegex.exec(ruleString)!;
         const value = Number(valueString);
         return {
           parameter,
-          comparison: comparison === ">" ? ">" : "<",
+          comparison,
           value,
           outcome,
-        };
+        } as Rule;
       }),
-      otherwise,
     ];
   }
   return rules;
@@ -128,18 +128,62 @@ type Span = [from: number, to: number];
 
 type RatingSpan = Record<Parameter, Span>;
 
-function part2(input: string) {
-  const [workflowsText] = input.split("\n\n");
-  const rules = parseRules(workflowsText);
-  const ratingSpans: RatingSpan[] = [
-    {
-      x: [1, 4_000],
-      m: [1, 4_000],
-      a: [1, 4_000],
-      s: [1, 4_000],
-    },
-  ];
-  return rules;
+function computePossibilities(
+  workflows: Record<string, [string, ...Rule[]]>,
+  ratingSpan: RatingSpan,
+  name = "in"
+): number {
+  if (isRejected(name)) {
+    return 0;
+  }
+  if (isApproved(name)) {
+    return Object.values(ratingSpan).reduce(
+      (acc, [lo, hi]) => acc * (hi - lo + 1),
+      1
+    );
+  }
+  const [otherwise, ...rules] = workflows[name];
+  let total = 0;
+  let currentSpan = ratingSpan;
+  for (const { parameter, comparison, value, outcome } of rules) {
+    const [low, high] = currentSpan[parameter];
+    let trueRange: Span, falseRange: Span;
+    if (comparison === "<") {
+      trueRange = [low, value - 1];
+      falseRange = [value, high];
+    } else {
+      trueRange = [value + 1, high];
+      falseRange = [low, value];
+    }
+    if (trueRange[0] <= trueRange[1]) {
+      total += computePossibilities(
+        workflows,
+        { ...currentSpan, [parameter]: trueRange },
+        outcome
+      );
+    }
+    if (falseRange[0] <= falseRange[1]) {
+      currentSpan = { ...currentSpan, [parameter]: falseRange };
+    } else {
+      break;
+    }
+  }
+  if (Object.values(currentSpan).every(([low, high]) => low <= high)) {
+    total += computePossibilities(workflows, currentSpan, otherwise);
+  }
+  return total;
 }
 
-console.log("Part 2", part2(day19Demo));
+function part2(input: string) {
+  const [workflowsText] = input.split("\n\n");
+  const workflows = parseRules(workflowsText);
+  const ratingSpan: RatingSpan = {
+    x: [1, 4_000],
+    m: [1, 4_000],
+    a: [1, 4_000],
+    s: [1, 4_000],
+  };
+  return computePossibilities(workflows, ratingSpan);
+}
+
+console.log("Part 2", part2(day19Input));
