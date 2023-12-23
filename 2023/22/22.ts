@@ -1,6 +1,13 @@
 import { day22Demo, day22Input } from "./22data.ts";
 import assert from "node:assert";
 
+declare global {
+  interface Set<T> {
+    difference(b: Set<T>): Set<T>;
+    isSubsetOf(b: Set<T>): boolean;
+  }
+}
+
 type Coords = [x: number, y: number, z: number];
 interface Brick {
   topLeft: Coords;
@@ -107,3 +114,32 @@ function part1(input: string) {
 }
 
 console.log("Part 1", part1(day22Input));
+
+function part2(input: string) {
+  const bricks = parseAndSortBricks(input);
+  const brickList = makeThemFall(bricks);
+  let total = 0;
+  for (const disintegrated of brickList) {
+    const queue: Brick[] = [];
+    const fallen = new Set<Brick>();
+    for (const above of disintegrated.supports.values()) {
+      if (above.supportedBy.size <= 1) {
+        queue.push(above);
+        fallen.add(above);
+      }
+    }
+    while (queue.length !== 0) {
+      const [brick] = queue.splice(0, 1);
+      for (const supportedBrick of brick.supports.difference(fallen)) {
+        if (supportedBrick.supportedBy.isSubsetOf(fallen)) {
+          queue.push(supportedBrick);
+          fallen.add(supportedBrick);
+        }
+      }
+    }
+    total += fallen.size;
+  }
+  return total;
+}
+
+console.log("Part 2", part2(day22Input));
