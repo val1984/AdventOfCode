@@ -129,7 +129,7 @@ function part2(input: string) {
       }
     }
     while (queue.length !== 0) {
-      const [brick] = queue.splice(0, 1);
+      const brick = queue.shift()!;
       for (const supportedBrick of brick.supports.difference(fallen)) {
         if (supportedBrick.supportedBy.isSubsetOf(fallen)) {
           queue.push(supportedBrick);
