@@ -2,5 +2,6 @@
   "deno.enable": true,
   "deno.lint": true,
   "deno.unstable": false,
-  "javascript.preferences.importModuleSpecifierEnding": "js"
+  "editor.tabSize": 2,
+	"files.eol": "\n"
 }
