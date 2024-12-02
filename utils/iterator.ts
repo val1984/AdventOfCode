@@ -1,5 +1,5 @@
 /**
- * Zip 2 arrays into a single iterator of tuples
+ * Zip 2 iterators into a single iterator of tuples
  * @param leftIt 
  * @param rightIt 
  */

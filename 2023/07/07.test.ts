@@ -1,20 +1,20 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "vitest";
 import { part1CompareHands, part2CompareHands, part2RankCards } from "./07";
 
 describe(part1CompareHands.name, () => {
   test("hands with same weight", () => {
     const actual = part1CompareHands("T55J5", "QQQJA");
-    expect(actual).toBeNegative();
+    expect(Math.sign(actual)).toBe(-1);
   });
 
   test("hand1 is heavier than hand2", () => {
     const actual = part1CompareHands("T55J5", "KK677");
-    expect(actual).toBePositive();
+    expect(Math.sign(actual)).toBe(1);
   });
 
   test("hand1 is lighter than hand2", () => {
     const actual = part1CompareHands("KTJJT", "QQQJA");
-    expect(actual).toBeNegative();
+    expect(Math.sign(actual)).toBe(-1);
   });
 });
 
@@ -26,15 +26,15 @@ describe(part2CompareHands.name, () => {
     test("hand1 is heavier than hand2", () => {
       const actual = part2CompareHands(hand1, hand2);
       if (isPositive) {
-        expect(actual).toBePositive();
+        expect(Math.sign(actual)).toBe(1);
       } else {
-        expect(actual).toBeNegative();
+        expect(Math.sign(actual)).toBe(-1);
       }
     })
   );
 
   test("hand2 is heavier than hand1", () => {
     const actual = part2CompareHands("QQQJA", "KTJJT");
-    expect(actual).toBeNegative();
+    expect(Math.sign(actual)).toBe(-1);
   });
 });

@@ -9,7 +9,7 @@
     "noEmit": true,
     "composite": true,
     "strict": true,
-    "downlevelIteration": true,
+    "downlevelIteration": false,
     "skipLibCheck": true,
     "jsx": "react-jsx",
     "allowSyntheticDefaultImports": true,
