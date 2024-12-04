@@ -1,3 +1,4 @@
+import { concat } from "../../utils/iterator.ts";
 import { day04Demo, day04Inputs } from "./04data.ts";
 
 function* columns(lines: readonly string[]) {
@@ -29,14 +30,6 @@ export function* antiDiagonals(lines: readonly string[], minSize = 4) {
       diag += lines?.[size - i + j]?.[j] ?? "";
     }
     yield diag;
-  }
-}
-
-function* concat<T>(...iterators: (IteratorObject<T> | readonly T[])[]) {
-  for (const iterator of iterators) {
-    for (const value of iterator) {
-      yield value;
-    }
   }
 }
 
