@@ -1,11 +1,13 @@
+type IteratorOrArray<T> = IteratorObject<T> | readonly T[];
+
 /**
  * Zip 2 iterators into a single iterator of tuples
  * @param left
  * @param right
  */
 export function* zip<L, R>(
-  leftItarraytor: Iterator<L> | readonly L[],
-  rightItarraytor: Iterator<R> | readonly R[]
+  leftItarraytor: IteratorOrArray<L>,
+  rightItarraytor: IteratorOrArray<R>
 ): IteratorObject<[L, R]> {
   const leftIt = Iterator.from(leftItarraytor);
   const rightIt = Iterator.from(rightItarraytor);
@@ -19,11 +21,26 @@ export function* zip<L, R>(
   return;
 }
 
+export function shallowEquals<T>(iterarraytor1: IteratorOrArray<T>, iterarraytor2: IteratorOrArray<T>) {
+  const it1 = Iterator.from(iterarraytor1);
+  const it2 = Iterator.from(iterarraytor2);
+  let result1 = it1.next();
+  let result2 = it2.next();
+  while (!result1.done && !result2.done) {
+    if (result1.value !== result2.value) {
+      return false
+    }
+    result1 = it1.next();
+    result2 = it2.next();
+  }
+  return true;
+}
+
 /**
  * Concatenate multiple iterators/arrays one after the other
  * @param iterators
  */
-export function* concat<T>(...iterators: (IteratorObject<T> | readonly T[])[]) {
+export function* concat<T>(...iterators: IteratorOrArray<T>[]) {
   for (const iterator of iterators) {
     for (const value of iterator) {
       yield value;
