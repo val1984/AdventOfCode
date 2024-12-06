@@ -1,11 +1,12 @@
 {
   "compilerOptions": {
     "lib": ["ESNext"],
-    "module": "esnext",
+    "module": "NodeNext",
     "target": "esnext",
-    "moduleResolution": "bundler",
+    "moduleResolution": "NodeNext",
     "moduleDetection": "force",
     "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
     "noEmit": true,
     "composite": true,
     "strict": true,
