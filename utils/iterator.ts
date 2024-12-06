@@ -33,7 +33,7 @@ export function shallowEquals<T>(iterarraytor1: IteratorOrArray<T>, iterarraytor
     result1 = it1.next();
     result2 = it2.next();
   }
-  return true;
+  return result1.done && result2.done;
 }
 
 /**
