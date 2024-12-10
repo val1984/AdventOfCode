@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "lib": ["ESNext"],
+    "lib": ["webworker", "ESNext"],
     "module": "NodeNext",
     "target": "esnext",
     "moduleResolution": "NodeNext",
@@ -15,9 +15,6 @@
     "jsx": "react-jsx",
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
-    "allowJs": true,
-    "types": [
-      "bun-types" // add Bun global
-    ]
+    "allowJs": true
   }
 }
