@@ -51,20 +51,21 @@ function part2(inputs: string) {
   let checksum = 0;
   const newBlocks = [...blocks];
   for (let index = blocks.length - 1; index > 0; index--) {
+    const block = blocks[index];
     let fittingPos = 0;
     let newPos = newBlocks[0];
-    while (spaces[fittingPos] < blocks[index] && fittingPos < index) {
+    while (spaces[fittingPos] < block && fittingPos < index) {
       newPos += spaces[fittingPos] + newBlocks[fittingPos + 1];
       fittingPos++;
     }
-    if (spaces[fittingPos] >= blocks[index] && fittingPos < index) {
-      const startIndex = hardDrive.findIndex(x => x === index);
-      for (let i = 0; i < blocks[index]; i++) {
-        delete hardDrive[startIndex + i];
+    if (spaces[fittingPos] >= block && fittingPos < index) {
+      const oldPos = hardDrive.findIndex(x => x === index);
+      for (let i = 0; i < block; i++) {
+        delete hardDrive[oldPos + i];
         hardDrive[newPos + i] = index;
       }
-      spaces[fittingPos] -= blocks[index];
-      newBlocks[fittingPos] += blocks[index];
+      spaces[fittingPos] -= block;
+      newBlocks[fittingPos] += block;
     }
   }
   for (let pos = 0; pos < hardDrive.length; pos++) {
