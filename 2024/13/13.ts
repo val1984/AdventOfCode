@@ -51,3 +51,17 @@ function part1(inputs: string) {
 }
 
 console.log(part1(day13Inputs));
+
+const delta = 10_000_000_000_000;
+
+function part2(inputs: string) {
+  const machines = parse(inputs).map(({ prize: [px, py], ...machine }) => ({
+    ...machine,
+    prize: [px + delta, py + delta],
+  } satisfies Machine));
+  return machines.reduce((total, machine) => {
+    return total + solve(machine);
+  }, 0);
+}
+
+console.log(part2(day13Inputs));
