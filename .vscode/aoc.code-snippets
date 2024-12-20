@@ -18,7 +18,8 @@
 	"part1": {
 		"scope": "javascript,typescript",
 		"prefix": [
-			"part1"
+			"part1",
+			"p1"
 		],
 		"body": [
 			"import { day${TM_FILENAME_BASE}Demo } from \"./${TM_FILENAME_BASE}data.ts\";",
@@ -40,7 +41,8 @@
 	"part2": {
 		"scope": "javascript,typescript",
 		"prefix": [
-			"part2"
+			"part2",
+			"p2"
 		],
 		"body": [
 			"function part2(inputs: string) {",
