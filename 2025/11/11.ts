@@ -3,10 +3,24 @@ import { readFile } from "node:fs/promises";
 const demo = await readInputs("demo.txt");
 const inputs = await readInputs("inputs.txt");
 console.log("Step 1:", step1(inputs));
-// console.log("Step 2:", step2(inputs));
+console.log("Step 2:", step2(inputs));
 
 function step1(graph: Graph) {
 	return visit(graph, "you", "out").reduce(sum, 0);
+}
+
+function step2(graph: Graph) {
+	const svrToDac = visit(graph, "svr", "dac").reduce(sum, 0);
+	const dacToFft = visit(graph, "dac", "fft").reduce(sum, 0);
+	const fftToOut = visit(graph, "fft", "out").reduce(sum, 0);
+  const dacFirst = svrToDac * dacToFft * fftToOut;
+
+	const dacToOut = visit(graph, "dac", "out").reduce(sum, 0);
+	const fftToDac = visit(graph, "fft", "dac").reduce(sum, 0);
+	const svrToFft = visit(graph, "svr", "fft").reduce(sum, 0);
+  const fftFirst = svrToFft * fftToDac * dacToOut;
+
+	return dacFirst + fftFirst;
 }
 
 function* visit(
@@ -16,7 +30,7 @@ function* visit(
 	cache = new Map<string, number>(),
 ): Generator<number> {
 	const cached = cache.get(from);
-	if (cached) {
+	if (cached !== undefined) {
 		yield cached;
 	} else if (from === destination) {
 		yield 1;
